@@ -31,6 +31,4 @@ server:
     session:
       cookie:
         same-site: strict
-        secure: true
-        http-only: true
 
