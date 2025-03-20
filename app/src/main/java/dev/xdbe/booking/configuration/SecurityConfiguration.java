@@ -48,27 +48,9 @@ public class SecurityConfiguration {
     }
 
     // Step 3: add InMemoryUserDetailsManager
-    /*
+    
     @Bean
     public UserDetailsService userDetailsService() {
-        UserDetails admin = User.withDefaultPasswordEncoder()
-            .username("admin")
-            .password("admin")
-            .roles("ADMIN")
-            .build();
-        return new InMemoryUserDetailsManager(admin);
-    }
-    */
-   
-    // --- Setp 4
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-    
-    // Create in memory database for user
-    @Bean
-    public UserDetailsService users() {
         PasswordEncoder encoder = passwordEncoder();
         UserDetails admin = User.builder()
                 .username("admin")
@@ -83,5 +65,11 @@ public class SecurityConfiguration {
                 .build();
         return new InMemoryUserDetailsManager(admin, user);
     }
+    
 
+    // --- Setp 4
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }
