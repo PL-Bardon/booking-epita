@@ -58,7 +58,7 @@ public class SecurityConfiguration {
                 .roles("ADMIN")
                 .build();
 
-        UserDetails user = User.builder()
+        UserDetails user = User.builder()   
                 .username("user")
                 .password(encoder.encode("myPassword"))
                 .roles("USER")

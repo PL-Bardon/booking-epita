@@ -27,3 +27,10 @@ server:
   port: 8443
   ssl:
     bundle: web
+  servlet:
+    session:
+      cookie:
+        same-site: strict
+        secure: true
+        http-only: true
+
