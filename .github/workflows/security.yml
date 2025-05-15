@@ -1,4 +1,4 @@
-name: Daily Security Pipeline
+name: TP4 - SecWeb - Daily Security Pipeline
 
 on:
   schedule:
