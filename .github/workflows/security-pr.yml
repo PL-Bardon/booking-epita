@@ -29,4 +29,4 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
-      - run: semgrep scan --config p/java --baseline-ref=${{ github.event.pull_request.base.sha }} --sarif --output=semgrep.diff.sarif
+      - run: semgrep scan --config p/java --sarif --output=semgrep.diff.sarif
