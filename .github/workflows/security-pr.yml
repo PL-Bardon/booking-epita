@@ -1,0 +1,38 @@
+name: TP4 - SecWeb - Security Check on Pull Request
+
+permissions:
+  contents: read
+
+on:
+  pull_request:
+
+jobs:
+  dependencies-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: google/osv-scanner-action/osv-scanner-action@8dded7155905cd666190a12dc9997000e58d163d
+        with:
+          scan-args: "--output=osv.diff.sarif --format=sarif ./app"
+        continue-on-error: true
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: osv-diff-report
+          path: osv.diff.sarif
+
+  source-code-analysis:
+    runs-on: ubuntu-latest
+    container:
+      image: returntocorp/semgrep
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: semgrep scan --config p/java --baseline-ref=${{ github.event.pull_request.base.sha }} --sarif --output=semgrep.diff.sarif
+        continue-on-error: true
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: semgrep-diff-report
+          path: semgrep.diff.sarif
