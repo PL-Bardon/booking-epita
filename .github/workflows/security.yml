@@ -1,5 +1,9 @@
 name: TP4 - SecWeb - Daily Security Pipeline
 
+permissions:
+  security-events: write
+  contents: read
+
 on:
   schedule:
     - cron: '0 2 * * *'
@@ -9,12 +13,13 @@ jobs:
   dependencies-analysis:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: google/osv-scanner-action@v2.0.2
-        with:
-          scan-args: --format sarif --output-file osv.sarif ./app
+      - uses: actions/checkout@v4
 
-      - uses: github/codeql-action/upload-sarif@v2
+      - uses: google/osv-scanner-action/osv-scanner-action@8dded7155905cd666190a12dc9997000e58d163d
+        with:
+          scan-args: "--output=osv.sarif --format=sarif ./app"
+
+      - uses: github/codeql-action/upload-sarif@28deaeda66b76a05916b6923827895f2b14ab387
         with:
           sarif_file: osv.sarif
 
@@ -23,12 +28,10 @@ jobs:
     container:
       image: returntocorp/semgrep
     steps:
-      - uses: actions/checkout@v3
-      - uses: returntocorp/semgrep-action@v1
-        with:
-          config: p/java
-          generateSarif: true
-          output: semgrep.sarif
-      - uses: github/codeql-action/upload-sarif@v2
+      - uses: actions/checkout@v4
+
+      - run: semgrep scan --config p/java --sarif --output=semgrep.sarif
+
+      - uses: github/codeql-action/upload-sarif@28deaeda66b76a05916b6923827895f2b14ab387
         with:
           sarif_file: semgrep.sarif
