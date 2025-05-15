@@ -17,7 +17,7 @@ jobs:
           scan-args: "--output=osv.diff.sarif --format=sarif ./app"
         continue-on-error: true
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@bc7ff06c6a4a296e2c16c03c5d0d8fdd5d2c74c1
         with:
           name: osv-diff-report
           path: osv.diff.sarif
@@ -27,12 +27,12 @@ jobs:
     container:
       image: returntocorp/semgrep
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
       - run: semgrep scan --config p/java --baseline-ref=${{ github.event.pull_request.base.sha }} --sarif --output=semgrep.diff.sarif
         continue-on-error: true
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@bc7ff06c6a4a296e2c16c03c5d0d8fdd5d2c74c1
         with:
           name: semgrep-diff-report
           path: semgrep.diff.sarif
