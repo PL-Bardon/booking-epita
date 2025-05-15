@@ -28,5 +28,23 @@ jobs:
       image: returntocorp/semgrep
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 2
 
-      - run: semgrep scan --config p/java --sarif --output=semgrep.diff.sarif
+      - run: semgrep scan --config p/java --sarif --output=semgrep-pr.sarif ./app || true
+
+      - run: |
+          git fetch origin ${{ github.base_ref }}
+          git checkout origin/${{ github.base_ref }}
+
+      - run: semgrep scan --config p/java --sarif --output=semgrep-base.sarif ./app || true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: semgrep-pr-report
+          path: semgrep-pr.sarif
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: semgrep-base-report
+          path: semgrep-base.sarif
