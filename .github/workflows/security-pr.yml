@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with :
+            fetch-depth: 0
 
       - uses: google/osv-scanner-action/osv-scanner-action@8dded7155905cd666190a12dc9997000e58d163d
         with:
@@ -24,9 +26,19 @@ jobs:
 
   source-code-analysis:
     runs-on: ubuntu-latest
-    container:
-      image: returntocorp/semgrep
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - run: semgrep scan --config p/java --baseline-commit ${{ github.event.pull_request.base.sha }} --sarif --output=semgrep.diff.sarif --error
+      - name: Install Semgrep
+        run: pip install semgrep
+
+      - name: Run Semgrep differential analysis
+        run: |
+          semgrep scan \
+            --error \
+            --baseline-commit ${{ github.event.pull_request.base.sha }} \
+            --config "p/java" \
+            --sarif \
+            --output=semgrep.diff.sarif
