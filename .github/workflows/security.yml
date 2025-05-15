@@ -1,4 +1,4 @@
-name: Tp3 - SecWeb - Daily Security Pipeline
+name: Daily Security Pipeline
 
 on:
   schedule:
