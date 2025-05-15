@@ -32,7 +32,7 @@ jobs:
       - run: semgrep scan --config p/java --baseline-ref=${{ github.event.pull_request.base.sha }} --sarif --output=semgrep.diff.sarif
         continue-on-error: true
 
-      - uses: actions/upload-artifact@bc7ff06c6a4a296e2c16c03c5d0d8fdd5d2c74c1
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: semgrep-diff-report
           path: semgrep.diff.sarif
